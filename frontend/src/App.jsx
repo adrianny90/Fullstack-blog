@@ -1,6 +1,9 @@
 import "./App.css";
 import { Routes, Route } from "react-router";
 import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import PostPage from "./pages/PostPage";
+import PostDetailPage from "./pages/PostDetailPage";
 
 function App() {
   return (
