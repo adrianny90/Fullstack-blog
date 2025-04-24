@@ -1,4 +1,8 @@
+import { Link, useParams } from "react-router";
+
 function PostDetailPage() {
+  const { id } = useParams();
+
   return (
     <div className="post-detail-page">
       <h1>Post Detail Page</h1>

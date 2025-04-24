@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import fetchPosts from "../utils/fetchPosts";
+import { fetchPosts } from "../utils/fetchPosts";
 import { Link } from "react-router";
 
 const Home = () => {
@@ -39,7 +39,7 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const currPosts = fetchPosts();
+    // const currPosts = fetchPosts();
     setPosts(demoData);
   }, []);
 
