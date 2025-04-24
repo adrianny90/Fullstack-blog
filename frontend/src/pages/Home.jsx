@@ -9,7 +9,9 @@ const Home = () => {
   // const {data, load, error} = useFetchPosts()
   // if (load) return <div>Loading...</div>;
   // if (error) return <div>Error! {error}</div>;
-  setPosts(demoData);
+  useEffect(() => {
+    setPosts(demoData);
+  }, []);
 
   return (
     <>
@@ -17,8 +19,8 @@ const Home = () => {
       {console.log(posts)}
       <div className="grid grid-cols-3 gap-4">
         {posts.map((e) => (
-          <Link to={`/posts/${e.id}`}>
-            <div key={e.id} className="bg-amber-50 rounded-xl">
+          <Link key={e.id} to={`/posts/${e.id}`}>
+            <div className="bg-amber-50 rounded-xl">
               <p>{e.title}</p>
               <p>{e.author}</p>
               <p>
