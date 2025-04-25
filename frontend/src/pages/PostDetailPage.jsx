@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useFetchPostById } from "../utils/useFetchPost";
 import { demoData } from "../utils/demodata";
@@ -9,19 +9,16 @@ function PostDetailPage() {
   const { id } = useParams();
   const [entry, setEntry] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const { data, load, error } = useFetchPostById(id);
 
-  // const {data, loading, error} = useFetchPostById(id);
-  // if (load) return <div>Loading...</div>;
-  // if (error) return <div>Error! {error}</div>;
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const currEntry = demoData.find((e) => e.id === parseInt(id));
-    setEntry(currEntry);
-    console.log(currEntry);
-  }, [id]);
+    if (data) setEntry(data[0]);
+  }, [data]);
 
-  // const isEditMode = () =>{
-  //   editMode = true ? ""
-  // }
+  if (load || !entry) return <div>Loading...</div>;
+  if (error) return <div>Error! {error}</div>;
 
   const handleUpdate = async () => {
     setEditMode(!editMode);
@@ -32,10 +29,19 @@ function PostDetailPage() {
   const handleDelete = async () => {
     setEditMode(false);
     document.getElementById("my_modal_2").close();
-    await deletePost(entry);
-  };
 
-  if (!entry) return <div>Loading...</div>;
+    try {
+      const result = await deletePost(entry);
+
+      if (result.error) {
+        console.error("Error:", result.error);
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <div className="post-detail-page">
@@ -69,7 +75,7 @@ function PostDetailPage() {
         />
         <textarea
           disabled={!editMode}
-          value={entry.content}
+          value={entry.content || ""}
           onChange={(e) => setEntry({ ...entry, content: e.target.value })}
         />
         <textarea disabled={true} value={entry.date} />

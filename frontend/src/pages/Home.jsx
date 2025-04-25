@@ -1,24 +1,20 @@
 import { useState, useEffect } from "react";
 import { useFetchPosts } from "../utils/useFetchPost";
 import { Link } from "react-router";
-import { demoData } from "../utils/demodata";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
 
-  // const {data, load, error} = useFetchPosts()
-  // if (load) return <div>Loading...</div>;
-  // if (error) return <div>Error! {error}</div>;
-  useEffect(() => {
-    setPosts(demoData);
-  }, []);
+  const { data, load, error } = useFetchPosts();
+  if (load) return <div>Loading...</div>;
+  if (error) return <div>Error! {error}</div>;
 
   return (
     <>
       <p>HOMEPAGE</p>
       {console.log(posts)}
       <div className="grid grid-cols-3 gap-4">
-        {posts.map((e) => (
+        {data.map((e) => (
           <Link key={e.id} to={`/posts/${e.id}`}>
             <div className="bg-amber-50 rounded-xl">
               <p>{e.title}</p>

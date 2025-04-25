@@ -1,5 +1,10 @@
-export const updatePost = async ({ entry }) => {
+export const updatePost = async (entry) => {
   const url = `http://localhost:3000/posts/${entry.id}`;
+
+  if (!entry) {
+    console.error("Entry is undefined!");
+    return { error: "Entry is undefined" };
+  }
 
   try {
     const response = await fetch(url, {
