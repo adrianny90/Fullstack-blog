@@ -1,4 +1,4 @@
-export const deletePost = async ({ entry }) => {
+export const deletePost = async (entry) => {
   const url = `http://localhost:3000/posts/${entry.id}`;
 
   try {
