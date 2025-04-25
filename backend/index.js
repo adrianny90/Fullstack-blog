@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import {
   getAllPosts,
   createPost,
@@ -11,7 +12,11 @@ dotenv.config();
 
 const app = express();
 const port = 3000;
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(express.json());
 
 app.get("/posts", getAllPosts);
