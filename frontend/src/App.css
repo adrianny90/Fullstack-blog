@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@custom-variant hover (&:hover);
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+  a {
+    cursor: pointer;
+  }
+  textarea:disabled,
+  .textarea:disabled {
+    cursor: auto !important;
+    background-color: transparent !important;
+    border: none !important;
+    resize: none;
+  }
+}

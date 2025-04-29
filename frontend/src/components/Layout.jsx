@@ -12,7 +12,7 @@ function Layout() {
       <main className="flex-grow p-4">
         <Outlet />
       </main>
-      <footer className="bg-purple-800 text-white p-4 text-center">
+      <footer className="bg-purple-800 text-white p-4 text-center mt-auto">
         &copy; 2025 My Blog
       </footer>
     </div>

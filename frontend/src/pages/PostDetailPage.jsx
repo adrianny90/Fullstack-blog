@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFetchPostById } from "../utils/useFetchPost";
 import { updatePost } from "../utils/updatePost";
 import { deletePost } from "../utils/deletePost";
@@ -16,6 +16,26 @@ function PostDetailPage() {
   useEffect(() => {
     if (data) setEntry(data[0]);
   }, [data]);
+
+  // Making Textarea grow
+  const contentRef = useRef(null);
+  const titleRef = useRef(null);
+  const authorRef = useRef(null);
+
+  useEffect(() => {
+    if (entry) {
+      handleInput(titleRef);
+      handleInput(contentRef);
+    }
+  }, [entry?.title, entry?.content]);
+
+  const handleInput = (ref) => {
+    const textarea = ref.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
 
   if (load || !entry) return <div>Loading...</div>;
   if (error) return <div>Error! {error}</div>;
@@ -47,7 +67,7 @@ function PostDetailPage() {
   };
 
   return (
-    <div className="post-detail-page p-6 max-w-xl mx-auto h-screen overflow-y-scroll-auto">
+    <div className="post-detail-page p-6 max-w-xl mx-auto overflow-y-scroll-auto">
       {successMessage && (
         <div className="bg-purple-200 text-red-800 p-4 rounded mb-4 flex justify-between items-center">
           {successMessage}
@@ -58,25 +78,35 @@ function PostDetailPage() {
         <img
           src={entry.cover}
           alt="Post Cover"
-          className="w-full h-96  object-cover rounded"
+          className="w-full h-96 object-contain rounded"
         />
         <textarea
+          ref={titleRef}
+          rows="1"
           disabled={!editMode}
           value={entry.title}
           onChange={(e) => setEntry({ ...entry, title: e.target.value })}
-          className={`w-full border rounded px-3 py-2 ${
+          className={`w-full border rounded px-3 py-2 my-0 font-bold text-xl ${
             editMode ? "border-blue-500" : "border-gray-300"
           }`}
         />
+        <div className="flex gap-4">
+          {" "}
+          <span className="py-2 px-3">Author:</span>
+          <textarea
+            ref={authorRef}
+            rows="1"
+            disabled={!editMode}
+            value={entry.author}
+            onChange={(e) => setEntry({ ...entry, author: e.target.value })}
+            className={`w-full border rounded px-3 py-2 my-0 ${
+              editMode ? "border-blue-500" : "border-gray-300"
+            }`}
+          />
+        </div>
         <textarea
-          disabled={!editMode}
-          value={entry.author}
-          onChange={(e) => setEntry({ ...entry, author: e.target.value })}
-          className={`w-full border rounded px-3 py-2 ${
-            editMode ? "border-blue-500" : "border-gray-300"
-          }`}
-        />
-        <textarea
+          ref={contentRef}
+          rows="1"
           disabled={!editMode}
           value={entry.content || ""}
           onChange={(e) => setEntry({ ...entry, content: e.target.value })}
@@ -86,7 +116,7 @@ function PostDetailPage() {
         />
         <textarea
           disabled={true}
-          value={entry.date}
+          value={new Date(entry.date).toLocaleDateString("de-DE")}
           className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
         />
       </div>
@@ -141,11 +171,11 @@ function PostDetailPage() {
               >
                 Yes, DELETE
               </button>
-              <form method="dialog">
-                <button className="btn bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
-                  Close
-                </button>
-              </form>
+              {/* <form method="dialog"> */}
+              <button className="btn bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
+                Close
+              </button>
+              {/* </form> */}
             </div>
           </div>
         </form>
