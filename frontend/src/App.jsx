@@ -2,8 +2,8 @@ import "./App.css";
 import { Routes, Route } from "react-router";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import PostPage from "./pages/PostPage";
 import PostDetailPage from "./pages/PostDetailPage";
+import CreatePostPage from "./pages/CreatePostPage";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
             <Route index element={<Home />} />
 
             {/* Static routes */}
-            <Route path="/posts" element={<PostPage />} />
+            <Route path="/posts" element={<CreatePostPage />} />
 
             {/* Dynamic route with URL parameter */}
             <Route path="/posts/:id" element={<PostDetailPage />} />
