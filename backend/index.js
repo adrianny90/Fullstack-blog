@@ -15,6 +15,9 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from Vite's build output (frontend/dist/)
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
 app.get("/posts", getAllPosts);
 
 app.get("/posts/:id", getOnePost);
