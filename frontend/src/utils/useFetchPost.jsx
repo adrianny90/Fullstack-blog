@@ -7,7 +7,7 @@ export const useFetchPosts = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const url = "http://localhost:3000/posts";
+      const url = "/posts";
       try {
         setLoad(true);
         const response = await fetch(url);
@@ -38,7 +38,7 @@ export const useFetchPostById = (id) => {
 
   useEffect(() => {
     const fetchPostById = async () => {
-      const url = `http://localhost:3000/posts/${id}`;
+      const url = `/posts/${id}`;
       try {
         setLoad(true);
         const response = await fetch(url);

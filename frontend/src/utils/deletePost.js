@@ -1,5 +1,5 @@
 export const deletePost = async (entry) => {
-  const url = `http://localhost:3000/posts/${entry.id}`;
+  const url = `/posts/${entry.id}`;
 
   try {
     const response = await fetch(url, {
