@@ -2,7 +2,7 @@
   "name": "my-fullstack-app",
   "version": "1.0.0",
   "scripts": {
-    "start": "cd backend && node server.js",
+    "start": "cd backend && node index.js",
     "postinstall": "cd frontend && npm install && npm run build",
     "build:frontend": "cd frontend && npm run build",
     "install:backend": "cd backend && npm install",
