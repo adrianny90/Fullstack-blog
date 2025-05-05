@@ -8,6 +8,7 @@ import {
   getOnePost,
 } from "./crudOperations.js";
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
 const app = express();
