@@ -8,12 +8,20 @@ import {
   getOnePost,
 } from "./crudOperations.js";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 dotenv.config();
 
 const app = express();
 const port = 3000;
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from Vite's build output (frontend/dist/)
+app.use(express.static(join(__dirname, "../frontend/dist")));
 
 app.get("/posts", getAllPosts);
 

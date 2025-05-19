@@ -27,27 +27,30 @@ const Home = () => {
         </button>
       </div>
       <div className="grid grid-cols-[repeat(auto-fit,_300px)] justify-center gap-6">
-        {data.toReversed().map((e) => (
-          <Link key={e.id} to={`/posts/${e.id}`}>
-            <div className="flex flex-col gap-2 bg-amber-50 rounded-xl px-4 py-3 shadow-md h-full hover:shadow-purple-800 transition-shadow duration-300">
-              <div className=" ">
-                <img
-                  src={e.cover}
-                  className="w-full object-contain object-center rounded-b-sm mb-3 h-[30vh]"
-                ></img>
+        {data
+          .slice()
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .map((e) => (
+            <Link key={e.id} to={`/posts/${e.id}`}>
+              <div className="flex flex-col gap-2 bg-amber-50 rounded-xl px-4 py-3 shadow-md h-full hover:shadow-purple-800 transition-shadow duration-300">
+                <div className=" ">
+                  <img
+                    src={e.cover}
+                    className="w-full object-contain object-center rounded-b-sm mb-3 h-[30vh]"
+                  ></img>
+                </div>
+                <p className="font-bold">{e.title}</p>
+                <p className="text-gray-600">{e.author}</p>
+                <p className="text-sm">
+                  {e.content.slice(0, 45)}
+                  {e.content.length > 45 ? "..." : null}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {new Date(e.date).toLocaleDateString("de-DE")}
+                </p>
               </div>
-              <p className="font-bold">{e.title}</p>
-              <p className="text-gray-600">{e.author}</p>
-              <p className="text-sm">
-                {e.content.slice(0, 45)}
-                {e.content.length > 45 ? "..." : null}
-              </p>
-              <p className="text-xs text-gray-500">
-                {new Date(e.date).toLocaleDateString("de-DE")}
-              </p>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
       </div>
     </>
   );
