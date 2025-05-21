@@ -7,7 +7,7 @@ export const useFetchPosts = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const url = "/posts";
+      const url = `${import.meta.env.VITE_API_BASE_URL}/posts`;
       try {
         setLoad(true);
         const response = await fetch(url);
@@ -38,7 +38,7 @@ export const useFetchPostById = (id) => {
 
   useEffect(() => {
     const fetchPostById = async () => {
-      const url = `/posts/${id}`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/posts/${id}`;
       try {
         setLoad(true);
         const response = await fetch(url);

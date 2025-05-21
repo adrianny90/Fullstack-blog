@@ -1,5 +1,5 @@
 export const updatePost = async (entry) => {
-  const url = `/posts/${entry.id}`;
+  const url = `${import.meta.env.VITE_API_BASE_URL}/posts/${entry.id}`;
 
   if (!entry) {
     console.error("Entry is undefined!");

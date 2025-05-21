@@ -1,5 +1,5 @@
 export const deletePost = async (entry) => {
-  const url = `/posts/${entry.id}`;
+  const url = `${import.meta.env.VITE_API_BASE_URL}/posts/${entry.id}`;
 
   try {
     const response = await fetch(url, {

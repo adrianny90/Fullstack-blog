@@ -26,13 +26,16 @@ function CreatePostPage() {
     }
 
     try {
-      const response = await fetch("/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...formData, date: new Date().toISOString() }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...formData, date: new Date().toISOString() }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create post");
