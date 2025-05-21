@@ -15,7 +15,7 @@ export const useFetchPosts = () => {
           throw new Error(`Response status:  ${response.status}`);
         }
         const json = await response.json();
-        console.log(json);
+
         setData(json);
       } catch (error) {
         console.error(error.message);
@@ -46,7 +46,7 @@ export const useFetchPostById = (id) => {
           throw new Error(`Response status:  ${response.status}`);
         }
         const json = await response.json();
-        console.log(json);
+
         setData(json);
       } catch (error) {
         console.error(error.message);
