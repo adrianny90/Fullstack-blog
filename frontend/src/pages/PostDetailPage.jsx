@@ -10,14 +10,13 @@ function PostDetailPage() {
   const [editMode, setEditMode] = useState(false);
   const { data, load, error } = useFetchPostById(id);
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (data) setEntry(data[0]);
   }, [data]);
 
-  // Making Textarea grow
   const contentRef = useRef(null);
   const titleRef = useRef(null);
   const authorRef = useRef(null);
@@ -26,8 +25,9 @@ function PostDetailPage() {
     if (entry) {
       handleInput(titleRef);
       handleInput(contentRef);
+      handleInput(authorRef);
     }
-  }, [entry?.title, entry?.content]);
+  }, [entry?.title, entry?.content, entry?.author]);
 
   const handleInput = (ref) => {
     const textarea = ref.current;
@@ -37,15 +37,21 @@ function PostDetailPage() {
     }
   };
 
-  if (load || !entry) return <div>Loading...</div>;
-  if (error) return <div>Error! {error}</div>;
+  if (load || !entry)
+    return <div className="p-6 text-gray-700">Loading...</div>;
+  if (error) return <div className="p-6 text-red-600">Error! {error}</div>;
 
   const handleUpdate = async () => {
     setEditMode(!editMode);
-
-    await updatePost(entry);
-    setSuccessMessage("Entry successfully updated!");
-    setTimeout(() => setSuccessMessage(""), 2000);
+    try {
+      await updatePost({
+        ...entry,
+      });
+      setSuccessMessage("Recipe successfully updated!");
+      setTimeout(() => setSuccessMessage(""), 2000);
+    } catch (err) {
+      setErrorMessage("Failed to update recipe: " + err.message);
+    }
   };
 
   const handleDelete = async () => {
@@ -54,31 +60,35 @@ function PostDetailPage() {
 
     try {
       const result = await deletePost(entry);
-
       if (result.error) {
-        console.error("Error:", result.error);
+        setErrorMessage("Failed to delete recipe: " + result.error);
       } else {
-        setSuccessMessage("Entry successfully deleted!");
-        setTimeout(() => navigate("/"), 1000);
+        setSuccessMessage("Recipe successfully deleted!");
+        setTimeout(() => navigate("/"), 3000);
       }
     } catch (error) {
-      console.error(error.message);
+      setErrorMessage("Failed to delete recipe: " + error.message);
     }
   };
 
   return (
-    <div className="post-detail-page p-6 max-w-xl mx-auto overflow-y-scroll-auto">
+    <div className="post-detail-page p-6 max-w-xl mx-auto">
       {successMessage && (
-        <div className="bg-purple-200 text-red-800 p-4 rounded mb-4 flex justify-between items-center">
+        <div className="bg-emerald-100 text-emerald-800 p-4 rounded-lg mb-4 flex justify-between items-center">
           {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-4 flex justify-between items-center">
+          {errorMessage}
         </div>
       )}
 
       <div key={entry.id} className="space-y-4">
         <img
           src={entry.cover}
-          alt="Post Cover"
-          className="w-full h-96 object-contain rounded"
+          alt="Recipe Cover"
+          className="w-full h-96 object-contain rounded-lg"
         />
         <textarea
           ref={titleRef}
@@ -86,96 +96,96 @@ function PostDetailPage() {
           disabled={!editMode}
           value={entry.title}
           onChange={(e) => setEntry({ ...entry, title: e.target.value })}
-          className={`w-full border rounded px-3 py-2 my-0 font-bold text-xl ${
-            editMode ? "border-blue-500" : "border-gray-300"
-          }`}
+          className={`w-full border text-center text-xl rounded-lg px-3 py-2 font-bold  ${
+            editMode
+              ? "border-emerald-500 focus:ring-2 focus:ring-emerald-400"
+              : "border-gray-300"
+          } focus:outline-none`}
         />
-        <div className="flex gap-4">
-          {" "}
-          <span className="py-2 px-3">Author:</span>
+        <div className="flex gap-4 items-center">
+          <span className="py-2 px-3 text-gray-700 font-medium">Author:</span>
           <textarea
             ref={authorRef}
             rows="1"
             disabled={!editMode}
             value={entry.author}
             onChange={(e) => setEntry({ ...entry, author: e.target.value })}
-            className={`w-full border rounded px-3 py-2 my-0 ${
-              editMode ? "border-blue-500" : "border-gray-300"
-            }`}
+            className={`w-full text-left  border rounded-lg px-3 py-2 ${
+              editMode
+                ? "border-emerald-500 focus:ring-2 focus:ring-emerald-400"
+                : "border-gray-300"
+            } focus:outline-none`}
           />
         </div>
+
         <textarea
           ref={contentRef}
           rows="1"
           disabled={!editMode}
           value={entry.content || ""}
           onChange={(e) => setEntry({ ...entry, content: e.target.value })}
-          className={`w-full border rounded px-3 py-2 ${
-            editMode ? "border-blue-500" : "border-gray-300"
-          }`}
-        />
-        <textarea
-          disabled={true}
-          value={new Date(entry.date).toLocaleDateString("de-DE")}
-          className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100"
+          className={`w-full border rounded-lg px-3 py-2 ${
+            editMode
+              ? "border-emerald-500 focus:ring-2 focus:ring-emerald-400"
+              : "border-gray-300"
+          } focus:outline-none`}
         />
       </div>
 
-      {/* Buttons Section */}
       <div className="flex justify-between items-center mt-6">
-        <Link to="/" className="text-blue-500 hover:underline font-medium">
+        <Link to="/" className="text-emerald-600 hover:underline font-medium">
           Go Back
         </Link>
         <div className="flex gap-4">
           {editMode === false ? (
             <button
               onClick={() => setEditMode(!editMode)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+              className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors duration-200"
             >
               Edit
             </button>
           ) : (
             <button
               onClick={() => handleUpdate()}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors duration-200"
             >
               Save
             </button>
           )}
-
           <button
             onClick={() => document.getElementById("my_modal_2").showModal()}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200"
           >
             Delete
           </button>
         </div>
       </div>
 
-      {/* MODAL */}
       <dialog id="my_modal_2" className="modal">
         <form
           method="dialog"
           className="modal-box fixed inset-0 flex items-center justify-center"
         >
-          <div className="bg-purple-200  rounded-lg shadow-lg p-6 w-96">
-            <h3 className="font-bold text-lg text-center">WARNING</h3>
-            <p className="py-4 text-center">
-              Do you really want to delete this entry?
+          <div className="bg-gray-50 rounded-lg shadow-lg p-6 w-96">
+            <h3 className="font-bold text-lg text-center text-emerald-800">
+              WARNING
+            </h3>
+            <p className="py-4 text-center text-gray-700">
+              Do you really want to delete this recipe?
             </p>
-
             <div className="modal-action mt-4 flex justify-center gap-6">
               <button
                 onClick={() => handleDelete()}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200"
               >
                 Yes, DELETE
               </button>
-              {/* <form method="dialog"> */}
-              <button className="btn bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors duration-200"
+                onClick={() => document.getElementById("my_modal_2").close()}
+              >
                 Close
               </button>
-              {/* </form> */}
             </div>
           </div>
         </form>
@@ -183,4 +193,5 @@ function PostDetailPage() {
     </div>
   );
 }
+
 export default PostDetailPage;
