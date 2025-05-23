@@ -34,7 +34,9 @@ app.put("/posts/:id", updatePost);
 app.delete("/posts/:id", deletePost);
 //this line of code is added behind routes, if route doesn't match, it creates error
 app.use((req, res) => {
-  const error = new Error(res.status(500).json({ error: "Wrong route" }));
+  const error = new Error(
+    res.status(500).json({ success: "now service is working" })
+  );
 });
 
 app.listen(port, () => {
